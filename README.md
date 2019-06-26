@@ -28,7 +28,7 @@ The service contains the following layers:
 - Use timestamps for double-checking transaction availability.
 
 ## Roadmap
-- [ ] Make docker config and install Express, Mongo and Redis
+- [x] Make docker config and install Express, Mongo and Redis
 - [ ] Implement API
 - [ ] Implement queue client
 - [ ] Make tests

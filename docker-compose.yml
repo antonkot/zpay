@@ -1,0 +1,58 @@
+version: '3.2'
+
+networks:
+  zpay:
+    driver: bridge
+
+services:
+  api:
+    build: ./
+    volumes:
+      - ./:/app
+    hostname: api
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - REDIS_URL=redis://redis
+      - MONGO_URL=mongodb://mongo
+    depends_on:
+      - mongo
+      - queue
+    networks:
+      - zpay
+    command: sh -c "npm i && node src/api.js"
+
+  queue:
+    build: ./
+    volumes:
+      - ./:/app
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis
+      - MONGO_URL=mongodb://mongo
+    depends_on:
+      - redis
+      - mongo
+    hostname: queue
+    networks:
+      - zpay
+    command: sh -c "node src/queue.js"
+
+  redis:
+    image: redis
+    restart: always
+    networks:
+      - zpay
+    ports:
+      - 6379:6379
+
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - zpay
+    ports:
+      - 27017:27017
