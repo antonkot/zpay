@@ -71,6 +71,7 @@ class Transaction {
   static save(data, res) {
     getDB(db => {
       const collection = db.collection('transactions');
+      data['status'] = 'pending';
 
       collection.insertOne(data, (err, result) => {
         if (err) {
