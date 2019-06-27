@@ -39,7 +39,7 @@ services:
     hostname: queue
     networks:
       - zpay
-    command: sh -c "node src/queue.js"
+    command: sh -c "npm run queue"
 
   redis:
     image: redis

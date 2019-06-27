@@ -9,18 +9,14 @@ const mongo = new MongoClient(
 const dbName = process.env.NODE_ENV == 'test' ? 'zpay_test' : 'zpay';
 
 // Call the cb-function with db instance
-function getDB(callback) {
+async function getDB() {
   // Already connected?
   if (mongo.isConnected()) {
-    callback(mongo.db(dbName));
+    return mongo.db(dbName);
   } else {
     // Connect to DB
-    mongo.connect(function(err, client) {
-      if (err) {
-        throw err;
-      }
-      callback(client.db(dbName));
-    });
+    await mongo.connect();
+    return mongo.db(dbName);
   }
 }
 

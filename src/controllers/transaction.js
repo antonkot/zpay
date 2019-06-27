@@ -1,4 +1,10 @@
 const getDB = require('../clients/mongo');
+const client = require('../clients/redis');
+
+const queueName =
+  process.env.NODE_ENV == 'test' ?
+  'transactions_test' :
+  'transactions';
 
 class Transaction {
 
@@ -17,7 +23,7 @@ class Transaction {
     next();
   }
 
-  // Chack amount
+  // Check amount
   static checkAmount(req, res, next) {
     if (!req.body.amount) {
       return res.status(400).json({
@@ -37,7 +43,7 @@ class Transaction {
     next();
   }
 
-  // Chack transfer
+  // Check transfer
   static checkTransfer(req, res, next) {
     if (!req.body.from_id) {
       return res.status(400).json({
@@ -67,19 +73,31 @@ class Transaction {
     next();
   }
 
-  // Save transaction to the database
-  static save(data, res) {
-    getDB(db => {
-      const collection = db.collection('transactions');
-      data['status'] = 'pending';
+  // Find transaction by id
+  static async find(id) {
+    const db = await getDB();
+    const collection = db.collection('transactions');
+    return collection.findOne({'_id':id});
+  }
 
-      collection.insertOne(data, (err, result) => {
-        if (err) {
-          res.status(500).json(err);
-        }
-        res.status(200).json(result.ops);
-      });
-    });
+  // Update transaction by id
+  static async update(id, data) {
+    const db = await getDB();
+    const collection = db.collection('transactions');
+    return collection.updateOne({'_id':id}, {$set: data});
+  }
+
+  // Save transaction to the database
+  static async save(data, res) {
+    const db = await getDB();
+    const collection = db.collection('transactions');
+    data['status'] = 'pending';
+
+    let result = await collection.insertOne(data);
+    // Push new job to the queue
+    client.rpush(queueName, result.ops[0]['_id'].toString());
+
+    res.status(200).json(result.ops);
   }
 
   // Make deposit

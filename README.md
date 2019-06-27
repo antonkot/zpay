@@ -30,5 +30,5 @@ The service contains the following layers:
 ## Roadmap
 - [x] Make docker config and install Express, Mongo and Redis
 - [x] Implement API
-- [ ] Implement queue client
+- [x] Implement queue client
 - [x] Make tests
