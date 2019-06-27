@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 const redis = require('redis');
 const redisClient = redis.createClient(process.env.REDIS_URL);
 
@@ -11,7 +14,7 @@ const mongoClient = new MongoClient(
 );
  
 mongoClient.connect(function(err, client) {
-    console.log('Connected to mongo');
+  console.log('Connected to mongo');
 });
 
 app.get('/', (req, res) => {

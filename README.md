@@ -31,4 +31,4 @@ The service contains the following layers:
 - [x] Make docker config and install Express, Mongo and Redis
 - [ ] Implement API
 - [ ] Implement queue client
-- [ ] Make tests
+- [x] Make tests

@@ -22,7 +22,7 @@ services:
       - queue
     networks:
       - zpay
-    command: sh -c "npm i && node src/api.js"
+    command: sh -c "npm i && npm run dev"
 
   queue:
     build: ./
