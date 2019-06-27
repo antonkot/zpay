@@ -35,27 +35,19 @@ The service contains the following layers:
 
 ### Install
 1. Clone this repo and navigate to the project root
--  Run services  
-```
-$ docker-compose up -d
-```
-API will be available at http://localhost:3000
-
-- Run api tests  
-```
-$ docker exec -it zpay_api_1 sh -c "npm run test"
-```
-- Monitor queue worker
-```
-$ docker-compose up queue
-```
+1.  Run services. API will be available at http://localhost:3000  
+` $ docker-compose up -d `
+1. Run api tests  
+` $ docker exec -it zpay_api_1 sh -c "npm run test" `  
+1. Monitor queue worker  
+` $ docker-compose up queue `  
 
 ## TODO
 1. Account creation
-- Request authentication and authorization
-- More tests
-- Refactor using DI for DB and Queue drivers
-- Implement real payment gateways. Should use DI for that.
+1. Request authentication and authorization
+1. More tests
+1. Refactor using DI for DB and Queue drivers
+1. Implement real payment gateways. Should use DI for that.
 
 ## Roadmap
 - [x] Make docker config and install Express, Mongo and Redis
