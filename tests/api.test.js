@@ -24,7 +24,7 @@ describe("/topup", () => {
       .send(payload)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('object');
+        res.body.should.be.an('array');
         done();
       });
   });
@@ -100,7 +100,7 @@ describe("/withdraw", () => {
       .send(payload)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('object');
+        res.body.should.be.an('array');
         done();
       });
   });
@@ -154,7 +154,7 @@ describe("/transfer", () => {
   it("Should transfer amount from from_id to_id", done => {
     let payload = {
       "from_id": "someID",
-      "from_id": "someAnotherID",
+      "to_id": "someAnotherID",
       "amount": 100
     };
     chai.request(app)
@@ -162,7 +162,7 @@ describe("/transfer", () => {
       .send(payload)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('object');
+        res.body.should.be.an('array');
         done();
       });
   });

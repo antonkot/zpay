@@ -1,25 +1,29 @@
 const express = require('express');
 const app = express();
 
+const transaction = require('./controllers/transaction');
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
-const redis = require('redis');
-const redisClient = redis.createClient(process.env.REDIS_URL);
+app.post('/topup', [
+  transaction.checkAccount,
+  transaction.checkAmount,
+  transaction.topup
+]);
 
-const MongoClient = require("mongodb").MongoClient;
-const mongoClient = new MongoClient(
-  process.env.MONGO_URL,
-  {useNewUrlParser: true}
-);
- 
-mongoClient.connect(function(err, client) {
-  console.log('Connected to mongo');
-});
+app.post('/withdraw', [
+  transaction.checkAccount,
+  transaction.checkAmount,
+  transaction.withdraw
+]);
 
-app.get('/', (req, res) => {
-  return res.send('Hello world');
-});
+app.post('/transfer', [
+  transaction.checkTransfer,
+  transaction.checkAmount,
+  transaction.transfer
+]);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
